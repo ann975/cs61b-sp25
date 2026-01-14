@@ -85,8 +85,8 @@ public class BeeCountingStage implements AdventureStage {
      */
     private int sumInput() {
         int sum = 0;
-        for (int i = 0; i < this.input.size(); i++) {
-            sum += Integer.parseInt(this.input.get(i));
+        for (String s : this.input) {
+            sum += Integer.parseInt(s);
         }
         return sum;
     }

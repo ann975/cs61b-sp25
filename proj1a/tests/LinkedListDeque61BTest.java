@@ -56,5 +56,67 @@ public class LinkedListDeque61BTest {
          assertThat(lld1.toList()).containsExactly(-2, -1, 0, 1, 2).inOrder();
      }
 
-    // Below, you'll write your own tests for LinkedListDeque61B.
+    @Test
+    /** check that empty list is indeed empty with size 0 */
+    public void testSizeAndIsEmpty(){
+         Deque61B<Integer> lld1 = new LinkedListDeque61B<>();
+         assertThat(lld1.isEmpty()).isTrue();
+         assertThat(lld1.size()).isEqualTo(0);
+    }
+
+    @Test
+    /** check that nonempty list ist not empty with size 1*/
+    public void testSizeAndIsNotEmptyTest(){
+        Deque61B<Integer> lld1 = new LinkedListDeque61B<>();
+        lld1.addLast(5);
+        assertThat(lld1.isEmpty()).isFalse();
+        assertThat(lld1.size()).isEqualTo(1);
+
+    }
+
+    @Test
+    /** check invalid argument (out of bounds) or negative index - in this case, return null and does not alter the deque.*/
+    public void testGetIterative(){
+        Deque61B<Integer> lld = new LinkedListDeque61B<>();
+        lld.addLast(5);
+        assertThat(lld.get(0)).isEqualTo(5);
+        assertThat(lld.get(110)).isNull();
+        assertThat(lld.get(-1)).isNull();
+        lld.addLast(100);
+        lld.addLast(6);
+        assertThat(lld.get(1)).isEqualTo(100);
+        assertThat(lld.toList()).containsExactly(5, 100, 6);
+    }
+
+    @Test
+    public void testGetRecursive(){
+        Deque61B<Integer> lld = new LinkedListDeque61B<>();
+        lld.addLast(5);
+        assertThat(lld.getRecursive(0)).isEqualTo(5);
+        assertThat(lld.getRecursive(110)).isNull();
+        assertThat(lld.getRecursive(-1)).isNull();
+        lld.addLast(100);
+        lld.addLast(6);
+        assertThat(lld.getRecursive(1)).isEqualTo(100);
+        assertThat(lld.toList()).containsExactly(5, 100, 6);
+    }
+
+    @Test
+    /** do not maintain references to items no longer in deque */
+    public void removeFirstAndRemoveLast(){
+        Deque61B<Integer> lld = new LinkedListDeque61B<>();
+        lld.addLast(5);
+        lld.addFirst(6);
+        lld.addLast(4);
+        lld.addFirst(3);
+        lld.removeFirst();
+        assertThat(lld.toList()).containsExactly(6,5,4).inOrder();
+        lld.removeLast();
+        assertThat(lld.toList()).containsExactly(6,5).inOrder();
+
+    }
+
+
+
 }
+

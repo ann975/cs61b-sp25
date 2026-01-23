@@ -30,6 +30,7 @@ public class LinkedListDeque61B<T> implements Deque61B<T>{
 
     /**
      * Doubly linked-list construtor.
+     * Empty list represented by single sentinel node that points to itself.
      * Sentinel and circular.
      */
     public LinkedListDeque61B(){
@@ -40,11 +41,14 @@ public class LinkedListDeque61B<T> implements Deque61B<T>{
     }
 
     /**
-     * Adds item to the front of the list.
+     * Adds item to the front of the deque.
      * @param x item to add
      */
     @Override
     public void addFirst(T x) {
+        // saves old first node, creates new node pointing to sentinel and old first node respectively
+        // reconnects the pointers
+        // increments size
         Node oldFirst = sentinel.next;
         Node newNode = new Node(sentinel, x, oldFirst);
         sentinel.next = newNode;
@@ -52,8 +56,15 @@ public class LinkedListDeque61B<T> implements Deque61B<T>{
         size++;
     }
 
+    /**
+     * Adds item to the end of the deque.
+     * @param x item to add
+     */
     @Override
     public void addLast(T x) {
+        // saves old last node, creates new node pointing to sentinel and old last respectively
+        // reconnects pointers
+        // increments size
         Node oldLast = sentinel.prev;
         Node newNode = new Node(oldLast, x, sentinel);
         oldLast.next = newNode;
@@ -63,6 +74,10 @@ public class LinkedListDeque61B<T> implements Deque61B<T>{
 
     }
 
+    /**
+     * Returns a list representation of the deque.
+     * @return list
+     */
     @Override
     public List<T> toList() {
         List<T> returnList = new ArrayList<>();
@@ -75,11 +90,19 @@ public class LinkedListDeque61B<T> implements Deque61B<T>{
         return returnList;
     }
 
+    /**
+     * Checks if deque is empty in constant time.
+     * @return true if empty, false otherwise
+     */
     @Override
     public boolean isEmpty() {
         return (size == 0);
     }
 
+    /**
+     * Returns the size of the deque is constant time.
+     * @return the size of the deque
+     */
     @Override
     public int size() {
         return size;
@@ -87,6 +110,8 @@ public class LinkedListDeque61B<T> implements Deque61B<T>{
 
     @Override
     public T removeFirst() {
+        if(size == 0) return null;
+
         Node prevFirst = sentinel.next;
         Node newFirst = sentinel.next.next;
         sentinel.next = newFirst;
@@ -96,6 +121,8 @@ public class LinkedListDeque61B<T> implements Deque61B<T>{
 
     @Override
     public T removeLast() {
+        if(size == 0) return null;
+
         Node prevLast = sentinel.prev;
         Node newLast = prevLast.prev;
         newLast.next = sentinel;
@@ -103,8 +130,15 @@ public class LinkedListDeque61B<T> implements Deque61B<T>{
         return prevLast.item;
     }
 
+    /**
+     * Gets the element at the specified index.
+     * @param index index to get
+     * @return item found
+     */
     @Override
     public T get(int index) {
+
+        if(index >= size || index < 0) return null;
         int currIndex = 0;
         Node curr = sentinel.next;
 
@@ -118,6 +152,14 @@ public class LinkedListDeque61B<T> implements Deque61B<T>{
 
     @Override
     public T getRecursive(int index) {
-        return null;
+        if(index >= size || index < 0) return null;
+        return getRecursiveHelper(sentinel.next, index);
+
+    }
+
+    public T getRecursiveHelper(Node curr, int index){
+        if(index == 0) return curr.item;
+
+        return getRecursiveHelper(curr.next, --index); //not index--
     }
 }
